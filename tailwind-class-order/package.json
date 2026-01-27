@@ -1,0 +1,43 @@
+{
+  "name": "eslint-plugin-tailwind-class-order",
+  "version": "0.1.0",
+  "description": "ESLint plugin for Tailwind CSS class ordering",
+  "type": "module",
+  "main": "index.mjs",
+  "exports": {
+    ".": "./index.mjs"
+  },
+  "files": [
+    "index.mjs",
+    "rules/",
+    "utils/"
+  ],
+  "scripts": {
+    "test": "node --test tests/**/*.test.mjs"
+  },
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "tailwind",
+    "tailwindcss",
+    "class-order",
+    "cva",
+    "cn"
+  ],
+  "author": "bloominggrace",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bloominggrace/eslint-plugins.git"
+  },
+  "peerDependencies": {
+    "eslint": ">=9.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
