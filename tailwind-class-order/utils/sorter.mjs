@@ -76,20 +76,6 @@ export function areArgumentsInOrder(args) {
       return false;
     }
   }
-  
+
   return true;
-}
-
-/**
- * cn() 인자의 대표 카테고리 결정 (첫 번째 클래스 기준)
- * @param {string} classString - 공백으로 구분된 클래스 문자열
- * @returns {number} - 카테고리 번호
- */
-export function getArgumentCategory(classString) {
-  const classes = parseClasses(classString);
-  if (classes.length === 0) {
-    return Infinity;
-  }
-
-  return getClassCategory(classes[0]);
 }

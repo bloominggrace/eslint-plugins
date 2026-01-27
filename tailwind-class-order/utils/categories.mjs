@@ -13,12 +13,12 @@ export const CATEGORY_ORDER = {
 
 export const CATEGORY_PATTERNS = [
   {
-    name: 'MARKER',
+    name: "MARKER",
     // 마커: group, peer 등 (자식/형제 요소 상태 참조를 위한)
     patterns: [/^group$/, /^peer$/],
   },
   {
-    name: 'LAYOUT',
+    name: "LAYOUT",
     // 자식 요소 배치: flex, grid, items-*, justify-*, gap-*, place-*
     patterns: [
       /^(static|fixed|absolute|relative|sticky)$/,
@@ -36,7 +36,7 @@ export const CATEGORY_PATTERNS = [
     ],
   },
   {
-    name: 'STRUCTURE',
+    name: "STRUCTURE",
     // 요소 구조: w-*, h-*, p-*, m-*, border (크기만), position, inset 등
     patterns: [
       /^w-/,
@@ -84,7 +84,7 @@ export const CATEGORY_PATTERNS = [
     ],
   },
   {
-    name: 'STYLE',
+    name: "STYLE",
     // 요소 스타일: typography-*, bg-*, rounded-*, shadow-*, text-*, truncate, border-[color]
     patterns: [
       /^typography-/,
@@ -144,7 +144,7 @@ export const CATEGORY_PATTERNS = [
     ],
   },
   {
-    name: 'TRANSITION',
+    name: "TRANSITION",
     // 요소 전환: transition-*, animate-*, duration-*, ease-*, rotate-*, scale-*, translate-*
     patterns: [
       /^transition/,
@@ -161,12 +161,12 @@ export const CATEGORY_PATTERNS = [
     ],
   },
   {
-    name: 'INTERACTION',
+    name: "INTERACTION",
     // 요소 상호작용: hover:*, focus:*
     patterns: [/^hover:/, /^focus:/, /^focus-within:/, /^focus-visible:/],
   },
   {
-    name: 'STATE',
+    name: "STATE",
     // 요소 상태: active:*, disabled:* 등
     patterns: [
       /^active:/,
@@ -201,7 +201,7 @@ export const CATEGORY_PATTERNS = [
     ],
   },
   {
-    name: 'ACCESSIBILITY',
+    name: "ACCESSIBILITY",
     // 요소 접근성: aria-*
     patterns: [/^aria-/, /^sr-only$/, /^not-sr-only$/],
   },
@@ -213,9 +213,9 @@ export const CATEGORY_PATTERNS = [
  * @returns {number} - 카테고리 순서 (낮을수록 먼저)
  */
 export function getClassCategory(className) {
-  const withoutResponsive = className.replace(/^(sm:|md:|lg:|xl:|2xl:)/, '');
+  const withoutResponsive = className.replace(/^(sm:|md:|lg:|xl:|2xl:)/, "");
 
-  const withoutDark = withoutResponsive.replace(/^dark:/, '');
+  const withoutDark = withoutResponsive.replace(/^dark:/, "");
 
   // 상태 접두사가 있는 경우 (hover:, focus: 등)
   for (const category of CATEGORY_PATTERNS) {
@@ -240,4 +240,32 @@ export function categorizeClasses(classes) {
     className,
     category: getClassCategory(className),
   }));
+}
+
+/**
+ * 카테고리 번호로 카테고리 이름 찾기
+ * @param {number} cat - 카테고리 번호
+ * @returns {string} - 카테고리 이름
+ */
+export function getCategoryName(cat) {
+  for (const [name, order] of Object.entries(CATEGORY_ORDER)) {
+    if (order === cat) return name;
+  }
+  return "CUSTOM";
+}
+
+/**
+ * 클래스 문자열의 대표 카테고리 결정 (첫 번째 클래스 기준)
+ * @param {string} classString - 공백으로 구분된 클래스 문자열
+ * @returns {number} - 카테고리 번호
+ */
+export function getArgumentCategory(classString) {
+  const classes = classString
+    .trim()
+    .split(/\s+/)
+    .filter((c) => c.length > 0);
+  if (classes.length === 0) {
+    return CATEGORY_ORDER.CUSTOM;
+  }
+  return getClassCategory(classes[0]);
 }
