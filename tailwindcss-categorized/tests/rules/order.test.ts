@@ -1,9 +1,10 @@
-import { RuleTester } from "eslint";
-import rule from "../../src/rules/order";
+import { RuleTester } from 'eslint';
+
+import rule from '@/rules/order';
 
 const ruleTester = new RuleTester();
 
-ruleTester.run("order", rule, {
+ruleTester.run('order', rule, {
   valid: [
     {
       code: 'cn("flex items-center", "w-4 h-4", "text-sm")',
@@ -30,37 +31,37 @@ ruleTester.run("order", rule, {
   invalid: [
     {
       code: 'cn("w-4", "flex")',
-      errors: [{ messageId: "unorderedArguments" }],
+      errors: [{ messageId: 'unorderedArguments' }],
       output: 'cn("flex", "w-4")',
     },
     {
       code: 'cn("sm:w-4", "sm:flex")',
-      errors: [{ messageId: "unorderedArguments" }],
+      errors: [{ messageId: 'unorderedArguments' }],
       output: 'cn("sm:flex", "sm:w-4")',
     },
     {
       code: 'cn("dark:text-white", "dark:flex")',
-      errors: [{ messageId: "unorderedArguments" }],
+      errors: [{ messageId: 'unorderedArguments' }],
       output: 'cn("dark:flex", "dark:text-white")',
     },
     {
       code: 'cn("dark:sm:w-4", "dark:sm:flex")',
-      errors: [{ messageId: "unorderedArguments" }],
+      errors: [{ messageId: 'unorderedArguments' }],
       output: 'cn("dark:sm:flex", "dark:sm:w-4")',
     },
     {
       code: 'cn(isActive && "flex", "text-sm")',
-      errors: [{ messageId: "unorderedArguments" }],
+      errors: [{ messageId: 'unorderedArguments' }],
       output: 'cn("text-sm", isActive && "flex")',
     },
     {
       code: 'cva("flex", { variants: { size: { sm: ["w-4", "flex"] } } })',
-      errors: [{ messageId: "unorderedArguments" }],
+      errors: [{ messageId: 'unorderedArguments' }],
       output: 'cva("flex", { variants: { size: { sm: ["flex", "w-4"] } } })',
     },
     {
       code: 'cn("w-4 flex", "text-sm")',
-      errors: [{ messageId: "misplacedClass" }],
+      errors: [{ messageId: 'misplacedClass' }],
     },
     {
       code: `const buttonVariants = cva(
@@ -107,10 +108,10 @@ ruleTester.run("order", rule, {
   }
 )`,
       errors: [
-        { messageId: "unorderedArguments" },
-        { messageId: "unorderedArguments" },
-        { messageId: "unorderedArguments" },
-        { messageId: "unorderedArguments" },
+        { messageId: 'unorderedArguments' },
+        { messageId: 'unorderedArguments' },
+        { messageId: 'unorderedArguments' },
+        { messageId: 'unorderedArguments' },
       ],
       output: `const buttonVariants = cva(
   "inline-flex items-center justify-center",

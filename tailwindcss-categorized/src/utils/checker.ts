@@ -1,19 +1,9 @@
-import type {
-  Node,
-  ObjectExpression,
-  Property,
-  ArrayExpression,
-  SpreadElement,
-} from "estree";
-import type { Rule } from "eslint";
-import { getStringValue } from "./ast";
-import {
-  CATEGORY_ORDER,
-  getArgumentCategory,
-  getCategoryName,
-  getClassCategory,
-} from "./categories";
-import { parseClasses } from "./sorter";
+import type { Rule } from 'eslint';
+import type { Node, ObjectExpression, SpreadElement } from 'estree';
+
+import { getStringValue } from './ast';
+import { CATEGORY_ORDER, getArgumentCategory, getCategoryName, getClassCategory } from './categories';
+import { parseClasses } from './sorter';
 
 interface ClassItem {
   node: Node;
@@ -35,7 +25,7 @@ function isCorrectOrder(args: Array<{ category: number }>): boolean {
 export function checkClassArray(
   elements: Array<Node | SpreadElement | null>,
   parentNode: Node,
-  context: Rule.RuleContext
+  context: Rule.RuleContext,
 ): void {
   const allItems: ClassItem[] = [];
 
@@ -43,12 +33,12 @@ export function checkClassArray(
     const element = elements[i];
     if (element === null) continue;
 
-    const text = context.sourceCode.getText(element as Node);
-    const line = getStringValue(element as Node);
+    const text = context.sourceCode.getText(element);
+    const line = getStringValue(element);
 
-    if (line !== null && line.trim() !== "") {
+    if (line !== null && line.trim() !== '') {
       allItems.push({
-        node: element as Node,
+        node: element,
         text,
         category: getArgumentCategory(line),
         index: i,
@@ -57,7 +47,7 @@ export function checkClassArray(
     } else {
       // 비문자열 (조건부, 변수, 함수 호출 등) - CVA 카테고리로 취급
       allItems.push({
-        node: element as Node,
+        node: element,
         text,
         category: CATEGORY_ORDER.CVA,
         index: i,
@@ -86,7 +76,7 @@ export function checkClassArray(
       if (clsCategory !== lineCategory) {
         context.report({
           node: item.node,
-          messageId: "misplacedClass",
+          messageId: 'misplacedClass',
           data: {
             className: cls,
             expected: getCategoryName(clsCategory),
@@ -108,19 +98,17 @@ export function checkClassArray(
     return a.index - b.index;
   });
 
-  const expectedOrder = sorted
-    .map((item) => `${getCategoryName(item.category)}`)
-    .join(" → ");
+  const expectedOrder = sorted.map((item) => `${getCategoryName(item.category)}`).join(' → ');
 
   context.report({
     node: parentNode,
-    messageId: "unorderedArguments",
+    messageId: 'unorderedArguments',
     data: {
       expected: expectedOrder,
     },
     fix(fixer) {
       const sortedTexts = sorted.map((item) => item.text);
-      const validElements = elements.filter((el) => el !== null) as Node[];
+      const validElements = elements.filter((el) => el !== null);
 
       const firstElement = validElements[0];
       const lastElement = validElements[validElements.length - 1];
@@ -135,7 +123,7 @@ export function checkClassArray(
 
       let newText = sortedTexts[0];
       for (let i = 1; i < sortedTexts.length; i++) {
-        const separator = separators[i - 1] || ",\n        ";
+        const separator = separators[i - 1] || ',\n        ';
         newText += separator + sortedTexts[i];
       }
 
@@ -144,38 +132,31 @@ export function checkClassArray(
           (firstElement as Node & { range: [number, number] }).range[0],
           (lastElement as Node & { range: [number, number] }).range[1],
         ],
-        newText
+        newText,
       );
     },
   });
 }
 
-export function checkCvaOptions(
-  optionsNode: ObjectExpression,
-  context: Rule.RuleContext
-): void {
+export function checkCvaOptions(optionsNode: ObjectExpression, context: Rule.RuleContext): void {
   for (const prop of optionsNode.properties) {
-    if (prop.type !== "Property") continue;
-    const property = prop as Property;
-    if (property.key.type !== "Identifier" || property.key.name !== "variants")
-      continue;
-    if (property.value.type !== "ObjectExpression") continue;
+    if (prop.type !== 'Property') continue;
+    const property = prop;
+    if (property.key.type !== 'Identifier' || property.key.name !== 'variants') continue;
+    if (property.value.type !== 'ObjectExpression') continue;
 
-    for (const variantProp of (property.value as ObjectExpression).properties) {
-      if (variantProp.type !== "Property") continue;
-      const variantProperty = variantProp as Property;
-      if (variantProperty.value.type !== "ObjectExpression") continue;
+    for (const variantProp of property.value.properties) {
+      if (variantProp.type !== 'Property') continue;
+      const variantProperty = variantProp;
+      if (variantProperty.value.type !== 'ObjectExpression') continue;
 
-      for (const optionProp of (variantProperty.value as ObjectExpression)
-        .properties) {
-        if (optionProp.type !== "Property") continue;
-        const optionProperty = optionProp as Property;
+      for (const optionProp of variantProperty.value.properties) {
+        if (optionProp.type !== 'Property') continue;
+        const optionProperty = optionProp;
 
-        if (optionProperty.value.type === "ArrayExpression") {
-          const arrayValue = optionProperty.value as ArrayExpression;
-          const validElements = arrayValue.elements.filter(
-            (el) => el !== null
-          );
+        if (optionProperty.value.type === 'ArrayExpression') {
+          const arrayValue = optionProperty.value;
+          const validElements = arrayValue.elements.filter((el) => el !== null);
           if (validElements.length > 1) {
             checkClassArray(arrayValue.elements, arrayValue, context);
           }

@@ -1,4 +1,4 @@
-import { getClassCategory } from "./categories";
+import { getClassCategory } from './categories';
 
 export function parseClasses(classString: string): string[] {
   return classString
@@ -23,13 +23,10 @@ export function sortClasses(classes: string[]): string[] {
 export function sortClassString(classString: string): string {
   const classes = parseClasses(classString);
   const sorted = sortClasses(classes);
-  return sorted.join(" ");
+  return sorted.join(' ');
 }
 
-export function areClassesInOrder(
-  classes1: string[],
-  classes2: string[]
-): boolean {
+export function areClassesInOrder(classes1: string[], classes2: string[]): boolean {
   if (classes1.length !== classes2.length) {
     return false;
   }

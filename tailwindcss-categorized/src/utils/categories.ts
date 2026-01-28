@@ -20,11 +20,11 @@ interface CategoryPattern {
 
 export const CATEGORY_PATTERNS: CategoryPattern[] = [
   {
-    name: "MARKER",
+    name: 'MARKER',
     patterns: [/^group$/, /^peer$/],
   },
   {
-    name: "LAYOUT",
+    name: 'LAYOUT',
     patterns: [
       /^(static|fixed|absolute|relative|sticky)$/,
       /^(inline-)?flex(-col|-row|-wrap|-nowrap|-1|-auto|-initial|-none)?$/,
@@ -41,7 +41,7 @@ export const CATEGORY_PATTERNS: CategoryPattern[] = [
     ],
   },
   {
-    name: "STRUCTURE",
+    name: 'STRUCTURE',
     patterns: [
       /^w-/,
       /^h-/,
@@ -88,7 +88,7 @@ export const CATEGORY_PATTERNS: CategoryPattern[] = [
     ],
   },
   {
-    name: "STYLE",
+    name: 'STYLE',
     patterns: [
       /^typography-/,
       /^font-/,
@@ -147,7 +147,7 @@ export const CATEGORY_PATTERNS: CategoryPattern[] = [
     ],
   },
   {
-    name: "TRANSITION",
+    name: 'TRANSITION',
     patterns: [
       /^transition/,
       /^animate-/,
@@ -163,11 +163,11 @@ export const CATEGORY_PATTERNS: CategoryPattern[] = [
     ],
   },
   {
-    name: "INTERACTION",
+    name: 'INTERACTION',
     patterns: [/^hover:/, /^focus:/, /^focus-within:/, /^focus-visible:/],
   },
   {
-    name: "STATE",
+    name: 'STATE',
     patterns: [
       /^active:/,
       /^disabled:/,
@@ -201,14 +201,13 @@ export const CATEGORY_PATTERNS: CategoryPattern[] = [
     ],
   },
   {
-    name: "ACCESSIBILITY",
+    name: 'ACCESSIBILITY',
     patterns: [/^aria-/, /^sr-only$/, /^not-sr-only$/],
   },
 ];
 
-
 export function getClassCategory(className: string): number {
-  const baseClass = className.replace(/^((sm:|md:|lg:|xl:|2xl:|dark:)+)/, "");
+  const baseClass = className.replace(/^((sm:|md:|lg:|xl:|2xl:|dark:)+)/, '');
 
   for (const category of CATEGORY_PATTERNS) {
     for (const pattern of category.patterns) {
@@ -221,9 +220,7 @@ export function getClassCategory(className: string): number {
   return CATEGORY_ORDER.CUSTOM;
 }
 
-export function categorizeClasses(
-  classes: string[]
-): Array<{ className: string; category: number }> {
+export function categorizeClasses(classes: string[]): Array<{ className: string; category: number }> {
   return classes.map((className) => ({
     className,
     category: getClassCategory(className),
@@ -234,7 +231,7 @@ export function getCategoryName(cat: number): string {
   for (const [name, order] of Object.entries(CATEGORY_ORDER)) {
     if (order === cat) return name;
   }
-  return "CUSTOM";
+  return 'CUSTOM';
 }
 
 export function getArgumentCategory(classString: string): number {

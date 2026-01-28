@@ -1,8 +1,9 @@
-import type { ESLint } from "eslint";
-import pkg from "../package.json" with { type: "json" };
-import orderRule from "./rules/order";
+import type { ESLint } from 'eslint';
 
-const plugin: ESLint.Plugin = {
+import pkg from '../package.json';
+import orderRule from './rules/order';
+
+export default {
   meta: {
     name: pkg.name,
     version: pkg.version,
@@ -10,6 +11,4 @@ const plugin: ESLint.Plugin = {
   rules: {
     order: orderRule,
   },
-};
-
-export default plugin;
+} satisfies ESLint.Plugin;
