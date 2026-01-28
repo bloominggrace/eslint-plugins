@@ -2,7 +2,7 @@
 
 ## 플러그인 종류
 
-### tailwind-class-order
+### tailwind-categorized
 
 cn(), cva() 내부의 클래스를 카테고리별로 정렬하는 플러그인입니다.
 
@@ -10,16 +10,14 @@ cn(), cva() 내부의 클래스를 카테고리별로 정렬하는 플러그인�
 
 ```js
 // eslint.config.mjs
-import tailwindClassOrder from 'tailwind-class-order';
+import tailwindCategorized from 'tailwind-categorized';
 
 export default tseslint.config([
-  {
-    plugins: {
-      'tailwind-class-order': tailwindClassOrder,
+  plugins: {
+      'tailwind-categorized': tailwindCategorized,
     },
     rules: {
-      'tailwind-class-order/order': 'warn',
+      'tailwind-categorized/order': 'warn',
     },
-  },
 ]);
 ```

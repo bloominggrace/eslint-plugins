@@ -1,5 +1,5 @@
 {
-  "name": "eslint-plugin-tailwindcss-categorized",
+  "name": "eslint-plugin-tailwind-categorized",
   "version": "0.1.0",
   "description": "Tailwind CSS 클래스들을 카테고리별로 정렬해주는 ESLint 플러그인입니다.",
   "type": "module",
@@ -22,6 +22,7 @@
     "tailwind",
     "tailwindcss",
     "class-order",
+    "categorized",
     "cva",
     "cn"
   ],
@@ -29,7 +30,12 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bloominggrace/eslint-plugins.git"
+    "url": "git+https://github.com/bloominggrace/eslint-plugins.git",
+    "directory": "tailwind-categorized"
+  },
+  "homepage": "https://github.com/bloominggrace/eslint-plugins#readme",
+  "bugs": {
+    "url": "https://github.com/bloominggrace/eslint-plugins/issues"
   },
   "peerDependencies": {
     "eslint": ">=9.0.0"

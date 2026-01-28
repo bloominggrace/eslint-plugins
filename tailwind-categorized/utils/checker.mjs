@@ -1,11 +1,11 @@
+import { getStringValue } from "./ast.mjs";
+import { parseClasses } from "./sorter.mjs";
 import {
   CATEGORY_ORDER,
-  getClassCategory,
-  getCategoryName,
   getArgumentCategory,
+  getCategoryName,
+  getClassCategory,
 } from "./categories.mjs";
-import { parseClasses } from "./sorter.mjs";
-import { getStringValue } from "./ast.mjs";
 
 /**
  * 인자 배열이 올바른 순서인지 확인

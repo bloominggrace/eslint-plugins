@@ -213,20 +213,16 @@ export const CATEGORY_PATTERNS = [
  * @returns {number} - 카테고리 순서 (낮을수록 먼저)
  */
 export function getClassCategory(className) {
-  const withoutResponsive = className.replace(/^(sm:|md:|lg:|xl:|2xl:)/, "");
+  const baseClass = className.replace(/^((sm:|md:|lg:|xl:|2xl:|dark:)+)/, "");
 
-  const withoutDark = withoutResponsive.replace(/^dark:/, "");
-
-  // 상태 접두사가 있는 경우 (hover:, focus: 등)
   for (const category of CATEGORY_PATTERNS) {
     for (const pattern of category.patterns) {
-      if (pattern.test(withoutDark)) {
+      if (pattern.test(baseClass)) {
         return CATEGORY_ORDER[category.name];
       }
     }
   }
 
-  // 어떤 카테고리에도 해당하지 않으면 커스텀
   return CATEGORY_ORDER.CUSTOM;
 }
 

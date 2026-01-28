@@ -1,5 +1,5 @@
+import pkg from "./package.json" with { type: "json" };
 import orderRule from "./rules/order.mjs";
-import pkg from "./package.json";
 
 /** @type {import('eslint').ESLint.Plugin} */
 export default {

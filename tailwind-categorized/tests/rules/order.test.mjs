@@ -11,12 +11,47 @@ ruleTester.run("order", rule, {
     {
       code: 'cva("flex", { variants: { size: { sm: ["flex", "w-4"] } } })',
     },
+    {
+      code: 'cn("flex dark:inline-flex", "bg-white dark:bg-black")',
+    },
+    {
+      code: 'cn("flex dark:sm:inline-flex sm:dark:inline")',
+    },
+    {
+      code: 'cn("flex", isActive && "bg-blue-500")',
+    },
+    {
+      code: 'cn("flex", isActive ? "bg-blue-500" : "bg-gray-500")',
+    },
+    {
+      code: 'cn("flex items-center", "text-sm", disabled && "opacity-50")',
+    },
   ],
   invalid: [
     {
       code: 'cn("w-4", "flex")',
       errors: [{ messageId: "unorderedArguments" }],
       output: 'cn("flex", "w-4")',
+    },
+    {
+      code: 'cn("sm:w-4", "sm:flex")',
+      errors: [{ messageId: "unorderedArguments" }],
+      output: 'cn("sm:flex", "sm:w-4")',
+    },
+    {
+      code: 'cn("dark:text-white", "dark:flex")',
+      errors: [{ messageId: "unorderedArguments" }],
+      output: 'cn("dark:flex", "dark:text-white")',
+    },
+    {
+      code: 'cn("dark:sm:w-4", "dark:sm:flex")',
+      errors: [{ messageId: "unorderedArguments" }],
+      output: 'cn("dark:sm:flex", "dark:sm:w-4")',
+    },
+    {
+      code: 'cn(isActive && "flex", "text-sm")',
+      errors: [{ messageId: "unorderedArguments" }],
+      output: 'cn("text-sm", isActive && "flex")',
     },
     {
       code: 'cva("flex", { variants: { size: { sm: ["w-4", "flex"] } } })',
