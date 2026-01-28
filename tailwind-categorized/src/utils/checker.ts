@@ -1,18 +1,29 @@
-import { getStringValue } from "./ast.mjs";
-import { parseClasses } from "./sorter.mjs";
+import type {
+  Node,
+  ObjectExpression,
+  Property,
+  ArrayExpression,
+  SpreadElement,
+} from "estree";
+import type { Rule } from "eslint";
+import { getStringValue } from "./ast";
 import {
   CATEGORY_ORDER,
   getArgumentCategory,
   getCategoryName,
   getClassCategory,
-} from "./categories.mjs";
+} from "./categories";
+import { parseClasses } from "./sorter";
 
-/**
- * 인자 배열이 올바른 순서인지 확인
- * @param {Array<{category: number}>} args
- * @returns {boolean}
- */
-function isCorrectOrder(args) {
+interface ClassItem {
+  node: Node;
+  text: string;
+  category: number;
+  index: number;
+  isString: boolean;
+}
+
+function isCorrectOrder(args: Array<{ category: number }>): boolean {
   for (let i = 1; i < args.length; i++) {
     if (args[i].category < args[i - 1].category) {
       return false;
@@ -21,24 +32,23 @@ function isCorrectOrder(args) {
   return true;
 }
 
-/**
- * 문자열 배열(또는 cn() 인자들)을 검사하는 공통 로직
- * @param {import('estree').Node[]} elements - 배열 요소들 또는 함수 인자들
- * @param {import('estree').Node} parentNode - 부모 노드 (에러 리포트용)
- * @param {import('eslint').Rule.RuleContext} context - ESLint 룰 컨텍스트
- */
-export function checkClassArray(elements, parentNode, context) {
-  /** @type {Array<{node: import('estree').Node, text: string, category: number, index: number, isString: boolean}>} */
-  const allItems = [];
+export function checkClassArray(
+  elements: Array<Node | SpreadElement | null>,
+  parentNode: Node,
+  context: Rule.RuleContext
+): void {
+  const allItems: ClassItem[] = [];
 
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
-    const text = context.sourceCode.getText(element);
-    const line = getStringValue(element);
+    if (element === null) continue;
+
+    const text = context.sourceCode.getText(element as Node);
+    const line = getStringValue(element as Node);
 
     if (line !== null && line.trim() !== "") {
       allItems.push({
-        node: element,
+        node: element as Node,
         text,
         category: getArgumentCategory(line),
         index: i,
@@ -47,7 +57,7 @@ export function checkClassArray(elements, parentNode, context) {
     } else {
       // 비문자열 (조건부, 변수, 함수 호출 등) - CVA 카테고리로 취급
       allItems.push({
-        node: element,
+        node: element as Node,
         text,
         category: CATEGORY_ORDER.CVA,
         index: i,
@@ -60,7 +70,6 @@ export function checkClassArray(elements, parentNode, context) {
     return;
   }
 
-  // 각 줄 내에 다른 카테고리 클래스가 있는지 검사
   for (const item of allItems) {
     if (!item.isString) continue;
 
@@ -111,17 +120,16 @@ export function checkClassArray(elements, parentNode, context) {
     },
     fix(fixer) {
       const sortedTexts = sorted.map((item) => item.text);
+      const validElements = elements.filter((el) => el !== null) as Node[];
 
-      const firstElement = elements[0];
-      const lastElement = elements[elements.length - 1];
+      const firstElement = validElements[0];
+      const lastElement = validElements[validElements.length - 1];
 
-      const separators = [];
-      for (let i = 0; i < elements.length - 1; i++) {
-        const currentEnd = elements[i].range[1];
-        const nextStart = elements[i + 1].range[0];
-        const separator = context.sourceCode
-          .getText()
-          .slice(currentEnd, nextStart);
+      const separators: string[] = [];
+      for (let i = 0; i < validElements.length - 1; i++) {
+        const currentEnd = (validElements[i] as Node & { range: [number, number] }).range[1];
+        const nextStart = (validElements[i + 1] as Node & { range: [number, number] }).range[0];
+        const separator = context.sourceCode.getText().slice(currentEnd, nextStart);
         separators.push(separator);
       }
 
@@ -132,41 +140,44 @@ export function checkClassArray(elements, parentNode, context) {
       }
 
       return fixer.replaceTextRange(
-        [firstElement.range[0], lastElement.range[1]],
-        newText,
+        [
+          (firstElement as Node & { range: [number, number] }).range[0],
+          (lastElement as Node & { range: [number, number] }).range[1],
+        ],
+        newText
       );
     },
   });
 }
 
-/**
- * cva() 내부의 variants 객체에서 배열들을 찾아 검사
- * @param {import('estree').ObjectExpression} optionsNode
- * @param {import('eslint').Rule.RuleContext} context - ESLint 룰 컨텍스트
- */
-export function checkCvaOptions(optionsNode, context) {
+export function checkCvaOptions(
+  optionsNode: ObjectExpression,
+  context: Rule.RuleContext
+): void {
   for (const prop of optionsNode.properties) {
     if (prop.type !== "Property") continue;
-    if (prop.key.type !== "Identifier" || prop.key.name !== "variants")
+    const property = prop as Property;
+    if (property.key.type !== "Identifier" || property.key.name !== "variants")
       continue;
-    if (prop.value.type !== "ObjectExpression") continue;
+    if (property.value.type !== "ObjectExpression") continue;
 
-    // variants 객체 내부 탐색
-    for (const variantProp of prop.value.properties) {
+    for (const variantProp of (property.value as ObjectExpression).properties) {
       if (variantProp.type !== "Property") continue;
-      if (variantProp.value.type !== "ObjectExpression") continue;
+      const variantProperty = variantProp as Property;
+      if (variantProperty.value.type !== "ObjectExpression") continue;
 
-      // 각 variant 옵션 탐색
-      for (const optionProp of variantProp.value.properties) {
+      for (const optionProp of (variantProperty.value as ObjectExpression)
+        .properties) {
         if (optionProp.type !== "Property") continue;
+        const optionProperty = optionProp as Property;
 
-        // 배열인 경우 검사
-        if (optionProp.value.type === "ArrayExpression") {
-          const elements = optionProp.value.elements.filter(
-            (el) => el !== null,
+        if (optionProperty.value.type === "ArrayExpression") {
+          const arrayValue = optionProperty.value as ArrayExpression;
+          const validElements = arrayValue.elements.filter(
+            (el) => el !== null
           );
-          if (elements.length > 1) {
-            checkClassArray(elements, optionProp.value, context);
+          if (validElements.length > 1) {
+            checkClassArray(arrayValue.elements, arrayValue, context);
           }
         }
       }

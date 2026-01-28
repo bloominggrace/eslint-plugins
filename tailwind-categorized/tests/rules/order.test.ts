@@ -1,5 +1,5 @@
 import { RuleTester } from "eslint";
-import rule from "../../rules/order.mjs";
+import rule from "../../src/rules/order";
 
 const ruleTester = new RuleTester();
 
@@ -107,10 +107,10 @@ ruleTester.run("order", rule, {
   }
 )`,
       errors: [
-        { messageId: "unorderedArguments" }, // default variant
-        { messageId: "unorderedArguments" }, // outline variant
-        { messageId: "unorderedArguments" }, // sm size
-        { messageId: "unorderedArguments" }, // lg size
+        { messageId: "unorderedArguments" },
+        { messageId: "unorderedArguments" },
+        { messageId: "unorderedArguments" },
+        { messageId: "unorderedArguments" },
       ],
       output: `const buttonVariants = cva(
   "inline-flex items-center justify-center",

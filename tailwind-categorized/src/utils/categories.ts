@@ -1,25 +1,30 @@
 export const CATEGORY_ORDER = {
-  MARKER: 0, // 마커 (group, peer 등)
-  LAYOUT: 1, // 자식 요소 배치
-  STRUCTURE: 2, // 요소 구조
-  STYLE: 3, // 요소 스타일
-  TRANSITION: 4, // 요소 전환
-  INTERACTION: 5, // 요소 상호작용 (hover, focus)
-  STATE: 6, // 요소 상태 (active, disabled)
-  ACCESSIBILITY: 7, // 요소 접근성 (aria)
-  CVA: 8, // Class Variance Authority
-  CUSTOM: 9, // 커스텀 클래스
-};
+  MARKER: 0,
+  LAYOUT: 1,
+  STRUCTURE: 2,
+  STYLE: 3,
+  TRANSITION: 4,
+  INTERACTION: 5,
+  STATE: 6,
+  ACCESSIBILITY: 7,
+  CVA: 8,
+  CUSTOM: 9,
+} as const;
 
-export const CATEGORY_PATTERNS = [
+export type CategoryName = keyof typeof CATEGORY_ORDER;
+
+interface CategoryPattern {
+  name: CategoryName;
+  patterns: RegExp[];
+}
+
+export const CATEGORY_PATTERNS: CategoryPattern[] = [
   {
     name: "MARKER",
-    // 마커: group, peer 등 (자식/형제 요소 상태 참조를 위한)
     patterns: [/^group$/, /^peer$/],
   },
   {
     name: "LAYOUT",
-    // 자식 요소 배치: flex, grid, items-*, justify-*, gap-*, place-*
     patterns: [
       /^(static|fixed|absolute|relative|sticky)$/,
       /^(inline-)?flex(-col|-row|-wrap|-nowrap|-1|-auto|-initial|-none)?$/,
@@ -37,7 +42,6 @@ export const CATEGORY_PATTERNS = [
   },
   {
     name: "STRUCTURE",
-    // 요소 구조: w-*, h-*, p-*, m-*, border (크기만), position, inset 등
     patterns: [
       /^w-/,
       /^h-/,
@@ -85,7 +89,6 @@ export const CATEGORY_PATTERNS = [
   },
   {
     name: "STYLE",
-    // 요소 스타일: typography-*, bg-*, rounded-*, shadow-*, text-*, truncate, border-[color]
     patterns: [
       /^typography-/,
       /^font-/,
@@ -145,7 +148,6 @@ export const CATEGORY_PATTERNS = [
   },
   {
     name: "TRANSITION",
-    // 요소 전환: transition-*, animate-*, duration-*, ease-*, rotate-*, scale-*, translate-*
     patterns: [
       /^transition/,
       /^animate-/,
@@ -162,12 +164,10 @@ export const CATEGORY_PATTERNS = [
   },
   {
     name: "INTERACTION",
-    // 요소 상호작용: hover:*, focus:*
     patterns: [/^hover:/, /^focus:/, /^focus-within:/, /^focus-visible:/],
   },
   {
     name: "STATE",
-    // 요소 상태: active:*, disabled:* 등
     patterns: [
       /^active:/,
       /^disabled:/,
@@ -202,17 +202,12 @@ export const CATEGORY_PATTERNS = [
   },
   {
     name: "ACCESSIBILITY",
-    // 요소 접근성: aria-*
     patterns: [/^aria-/, /^sr-only$/, /^not-sr-only$/],
   },
 ];
 
-/**
- * 클래스의 카테고리를 결정
- * @param {string} className - Tailwind 클래스명
- * @returns {number} - 카테고리 순서 (낮을수록 먼저)
- */
-export function getClassCategory(className) {
+
+export function getClassCategory(className: string): number {
   const baseClass = className.replace(/^((sm:|md:|lg:|xl:|2xl:|dark:)+)/, "");
 
   for (const category of CATEGORY_PATTERNS) {
@@ -226,36 +221,23 @@ export function getClassCategory(className) {
   return CATEGORY_ORDER.CUSTOM;
 }
 
-/**
- * 여러 클래스의 카테고리를 일괄 분류
- * @param {string[]} classes - 클래스 배열
- * @returns {Array<{className: string, category: number}>}
- */
-export function categorizeClasses(classes) {
+export function categorizeClasses(
+  classes: string[]
+): Array<{ className: string; category: number }> {
   return classes.map((className) => ({
     className,
     category: getClassCategory(className),
   }));
 }
 
-/**
- * 카테고리 번호로 카테고리 이름 찾기
- * @param {number} cat - 카테고리 번호
- * @returns {string} - 카테고리 이름
- */
-export function getCategoryName(cat) {
+export function getCategoryName(cat: number): string {
   for (const [name, order] of Object.entries(CATEGORY_ORDER)) {
     if (order === cat) return name;
   }
   return "CUSTOM";
 }
 
-/**
- * 클래스 문자열의 대표 카테고리 결정 (첫 번째 클래스 기준)
- * @param {string} classString - 공백으로 구분된 클래스 문자열
- * @returns {number} - 카테고리 번호
- */
-export function getArgumentCategory(classString) {
+export function getArgumentCategory(classString: string): number {
   const classes = classString
     .trim()
     .split(/\s+/)

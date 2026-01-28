@@ -1,8 +1,9 @@
-import { checkClassArray, checkCvaOptions } from "../utils/checker.mjs";
-import { isFunctionCall } from "../utils/ast.mjs";
+import type { Rule } from "eslint";
+import type { CallExpression, ObjectExpression } from "estree";
+import { isFunctionCall } from "../utils/ast";
+import { checkClassArray, checkCvaOptions } from "../utils/checker";
 
-/** @type {import('eslint').Rule.RuleModule} */
-export default {
+const rule: Rule.RuleModule = {
   meta: {
     type: "suggestion",
     docs: {
@@ -21,7 +22,7 @@ export default {
 
   create(context) {
     return {
-      CallExpression(node) {
+      CallExpression(node: CallExpression) {
         if (isFunctionCall(node, "cn")) {
           checkClassArray(node.arguments, node, context);
           return;
@@ -32,10 +33,12 @@ export default {
             node.arguments.length >= 2 &&
             node.arguments[1].type === "ObjectExpression"
           ) {
-            checkCvaOptions(node.arguments[1], context);
+            checkCvaOptions(node.arguments[1] as ObjectExpression, context);
           }
         }
       },
     };
   },
 };
+
+export default rule;
