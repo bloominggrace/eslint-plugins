@@ -1,7 +1,7 @@
 {
-  "name": "eslint-plugin-tailwind-class-order",
+  "name": "eslint-plugin-tailwindcss-categorized",
   "version": "0.1.0",
-  "description": "ESLint plugin for Tailwind CSS class ordering",
+  "description": "Tailwind CSS 클래스들을 카테고리별로 정렬해주는 ESLint 플러그인입니다.",
   "type": "module",
   "main": "index.mjs",
   "exports": {
