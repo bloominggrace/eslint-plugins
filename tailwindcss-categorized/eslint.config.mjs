@@ -8,9 +8,9 @@ import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
+export default [
   {
-    ignores: ['dist', 'node_modules', 'coverage'],
+    ignores: ['dist', 'node_modules', 'coverage', 'eslint.config.mjs'],
   },
   eslint.configs.recommended,
   eslintPluginPrettierRecommended,
@@ -52,4 +52,4 @@ export default tseslint.config(
       'no-console': 'off',
     },
   },
-);
+];

@@ -128,10 +128,7 @@ export function checkClassArray(
       }
 
       return fixer.replaceTextRange(
-        [
-          context.sourceCode.getRange(firstElement)[0],
-          context.sourceCode.getRange(lastElement)[1],
-        ],
+        [context.sourceCode.getRange(firstElement)[0], context.sourceCode.getRange(lastElement)[1]],
         newText,
       );
     },
