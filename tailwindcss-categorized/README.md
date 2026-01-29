@@ -1,25 +1,26 @@
 # tailwindcss-categorized
 
-cn(), cva() 내부의 클래스를 카테고리별로 정렬하는 플러그인입니다.
+cn(), cva() 함수 내부의 복잡한 클래스들을 의미 있는 카테고리별로 자동 정렬해주는 ESLint 플러그인입니다.
 
 ## 설치
 
 ```bash
-npm install -D eslint-plugin-tailwindcss-categorized
+npm install -D https://github.com/bloominggrace/eslint-plugins?path=tailwindcss-categorized
 ```
 
-## 적용 방법
+## 설정
 
-```js
-// eslint.config.mjs
-import tailwindCategorized from 'tailwind-categorized';
+```ts
+import tailwindCategorized from 'tailwindcss-categorized';
 
 export default tseslint.config([
-  plugins: {
-      'tailwind-categorized': tailwindCategorized,
+  {
+    plugins: {
+      'tailwindcss-categorized': tailwindCategorized,
     },
     rules: {
-      'tailwind-categorized/order': 'warn',
+      'tailwindcss-categorized/ordering': 'error',
     },
+  }
 ]);
 ```

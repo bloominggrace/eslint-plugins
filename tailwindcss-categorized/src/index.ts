@@ -1,7 +1,7 @@
 import type { ESLint } from 'eslint';
 
 import pkg from '../package.json';
-import orderRule from './rules/order';
+import orderRule from './rules/ordering';
 
 export default {
   meta: {
@@ -9,6 +9,6 @@ export default {
     version: pkg.version,
   },
   rules: {
-    order: orderRule,
+    ordering: orderRule,
   },
 } satisfies ESLint.Plugin;
