@@ -4,11 +4,11 @@ import type { CallExpression } from 'estree';
 import { isFunctionCall } from '@/utils/ast';
 import { checkClassArray, checkCvaOptions } from '@/utils/checker';
 
-const rule: Rule.RuleModule = {
+export default {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'cn() 함수 및 cva() 내 배열의 클래스가 카테고리 순서대로 배치되어 있는지 검사',
+      description: 'cn() 및 cva() 내 배열의 클래스가 카테고리 순서대로 배치되어 있는지 검사',
       recommended: false,
     },
     fixable: 'code',
@@ -28,13 +28,19 @@ const rule: Rule.RuleModule = {
         }
 
         if (isFunctionCall(node, 'cva')) {
-          if (node.arguments.length >= 2 && node.arguments[1].type === 'ObjectExpression') {
-            checkCvaOptions(node.arguments[1], context);
+          const [base, options] = node.arguments;
+
+          if (base) {
+            checkClassArray(base.type === 'ArrayExpression' ? base.elements : [base], node, context);
+          }
+
+          if (options?.type === 'ObjectExpression') {
+            checkCvaOptions(options, context);
           }
         }
       },
     };
   },
-};
+} satisfies Rule.RuleModule;
 
-export default rule;
+
