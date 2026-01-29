@@ -13,7 +13,7 @@
     "dist/"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "test": "npm run build && tsx --test tests/**/*.test.ts",
     "prepublishOnly": "npm run build"
   },

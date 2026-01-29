@@ -115,8 +115,8 @@ export function checkClassArray(
 
       const separators: string[] = [];
       for (let i = 0; i < validElements.length - 1; i++) {
-        const currentEnd = (validElements[i] as Node & { range: [number, number] }).range[1];
-        const nextStart = (validElements[i + 1] as Node & { range: [number, number] }).range[0];
+        const currentEnd = context.sourceCode.getRange(validElements[i])[1];
+        const nextStart = context.sourceCode.getRange(validElements[i + 1])[0];
         const separator = context.sourceCode.getText().slice(currentEnd, nextStart);
         separators.push(separator);
       }
@@ -129,8 +129,8 @@ export function checkClassArray(
 
       return fixer.replaceTextRange(
         [
-          (firstElement as Node & { range: [number, number] }).range[0],
-          (lastElement as Node & { range: [number, number] }).range[1],
+          context.sourceCode.getRange(firstElement)[0],
+          context.sourceCode.getRange(lastElement)[1],
         ],
         newText,
       );
