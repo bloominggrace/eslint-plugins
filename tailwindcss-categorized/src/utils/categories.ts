@@ -78,7 +78,7 @@ export const CATEGORIES = {
       /^top-/,
       /^visible$/,
       /^w-/,
-      /^z-/,
+      /^-?z-/,
     ],
   },
   STYLE: {
