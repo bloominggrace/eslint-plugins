@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-tailwindcss-categorized",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Tailwind CSS 클래스들을 카테고리별로 정렬해주는 ESLint 플러그인입니다.",
   "type": "module",
   "main": "dist/index.js",
