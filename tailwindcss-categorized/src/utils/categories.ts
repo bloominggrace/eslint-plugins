@@ -47,7 +47,7 @@ export const CATEGORIES = {
     patterns: [
       /^aspect-/,
       /^basis-/,
-      /^border(?:-[trblxyse])?(?:-(?:\d+|\[[^\]]+]))?$/,
+      /^border(?:-[trblxyse])?(?:-(?:[\d.]+|\[[^\]]+]))?$/,
       /^border-(collapse|separate)$/,
       /^border-spacing-/,
       /^bottom-/,
