@@ -153,6 +153,7 @@ export const CATEGORIES = {
       /^via-/,
       /^whitespace-/,
       /^will-change-/,
+      /^wrap-/,
     ],
   },
   TRANSITION: {
