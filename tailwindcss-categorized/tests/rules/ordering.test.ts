@@ -27,6 +27,9 @@ ruleTester.run('categorized', rule, {
     {
       code: 'cn("flex items-center", "text-sm", disabled && "opacity-50")',
     },
+    {
+      code: 'cn("variants({ size })", "flex items-center")',
+    },
   ],
   invalid: [
     {
@@ -60,11 +63,16 @@ ruleTester.run('categorized', rule, {
       output: 'cva("flex", { variants: { size: { sm: ["flex", "w-4"] } } })',
     },
     {
+      code: 'cn("flex items-center", "variants({ size })", "w-full")',
+      errors: [{ messageId: 'unorderedCategories' }],
+      output: 'cn("variants({ size })", "flex items-center", "w-full")',
+    },
+    {
       code: 'cn("w-4 flex", "text-sm")',
       errors: [{ messageId: 'misplacedClass' }],
     },
     {
-      code: `const buttonVariants = cva(
+      code: `const variants = cva(
         "inline-flex items-center justify-center",
         {
           variants: {
@@ -109,7 +117,7 @@ ruleTester.run('categorized', rule, {
         { messageId: 'unorderedCategories' },
         { messageId: 'unorderedCategories' },
       ],
-      output: `const buttonVariants = cva(
+      output: `const variants = cva(
         "inline-flex items-center justify-center",
         {
           variants: {

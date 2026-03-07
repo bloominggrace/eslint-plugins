@@ -1,7 +1,7 @@
 import type { Rule } from 'eslint';
 import type { Node, ObjectExpression, Property, SpreadElement } from 'estree';
 
-import { CATEGORIES, getCategoryName, getCategoryOrder } from './categories.js';
+import { CATEGORIES, getCategoryName, getCategoryOrder } from './categories';
 
 interface ClassMeta {
   node: Node;

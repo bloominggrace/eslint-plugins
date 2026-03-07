@@ -1,7 +1,7 @@
 import { type Rule } from 'eslint';
 import type { CallExpression } from 'estree';
 
-import { validateClassNames, validateCvaOptions } from '../utils/validaters.js';
+import { validateClassNames, validateCvaOptions } from '../validaters';
 
 export function isCallTo(node: CallExpression, name: string): boolean {
   return node.type === 'CallExpression' && node.callee.type === 'Identifier' && node.callee.name === name;
