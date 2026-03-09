@@ -30,6 +30,9 @@ ruleTester.run('categorized', rule, {
     {
       code: 'cn("variants({ size })", "flex items-center")',
     },
+    {
+      code: 'cn("variants({ size })", "flex items-center", className)',
+    },
   ],
   invalid: [
     {
@@ -66,6 +69,11 @@ ruleTester.run('categorized', rule, {
       code: 'cn("flex items-center", "variants({ size })", "w-full")',
       errors: [{ messageId: 'unorderedCategories' }],
       output: 'cn("variants({ size })", "flex items-center", "w-full")',
+    },
+    {
+      code: 'cn("variants({ size })", className, "flex items-center")',
+      errors: [{ messageId: 'unorderedCategories' }],
+      output: 'cn("variants({ size })", "flex items-center", className)',
     },
     {
       code: 'cn("w-4 flex", "text-sm")',

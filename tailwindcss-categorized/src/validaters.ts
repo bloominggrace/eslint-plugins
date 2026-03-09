@@ -23,7 +23,7 @@ export function validateClassNames(
 
       const className = getValue(node);
       const isValidClassName = typeof className === 'string' && className.trim() !== '';
-      const categoryOrder = isValidClassName ? getCategoryOrder(className) : CATEGORIES.CVA.order;
+      const categoryOrder = isValidClassName ? getCategoryOrder(className) : CATEGORIES.CUSTOM.order;
 
       return {
         node,
@@ -157,6 +157,10 @@ function getValue(node: Node): string | null {
 
   if (node.type === 'TemplateLiteral' && node.expressions.length === 0) {
     return node.quasis[0].value.cooked ?? null;
+  }
+
+  if (node.type === 'CallExpression' && node.callee.type === 'Identifier') {
+    return node.callee.name;
   }
 
   if (node.type === 'LogicalExpression') {
