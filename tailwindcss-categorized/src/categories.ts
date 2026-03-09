@@ -1,11 +1,16 @@
 export const CATEGORIES = {
-  MARKER: {
+  CVA: {
     order: 0,
+    name: 'Custom Variant',
+    patterns: [/^variants/i],
+  },
+  MARKER: {
+    order: 1,
     name: 'Marker',
     patterns: [/^group$/, /^peer$/],
   },
   LAYOUT: {
-    order: 1,
+    order: 2,
     name: 'Layout',
     patterns: [
       /^absolute$/,
@@ -42,7 +47,7 @@ export const CATEGORIES = {
     ],
   },
   STRUCTURE: {
-    order: 2,
+    order: 3,
     name: 'Structure',
     patterns: [
       /^aspect-/,
@@ -82,7 +87,7 @@ export const CATEGORIES = {
     ],
   },
   STYLE: {
-    order: 3,
+    order: 4,
     name: 'Style',
     patterns: [
       /^accent-/,
@@ -157,7 +162,7 @@ export const CATEGORIES = {
     ],
   },
   TRANSITION: {
-    order: 4,
+    order: 5,
     name: 'Transition',
     patterns: [
       /^animate-/,
@@ -174,12 +179,12 @@ export const CATEGORIES = {
     ],
   },
   INTERACTION: {
-    order: 5,
+    order: 6,
     name: 'Interaction',
     patterns: [/^focus(?:-(?:within|visible))?:/, /^hover:/],
   },
   STATE: {
-    order: 6,
+    order: 7,
     name: 'State',
     patterns: [
       /^active:/,
@@ -210,14 +215,9 @@ export const CATEGORIES = {
     ],
   },
   ACCESSIBILITY: {
-    order: 7,
+    order: 8,
     name: 'Accessibility',
     patterns: [/^aria-/, /^(?:not-)?sr-only$/],
-  },
-  CVA: {
-    order: 8,
-    name: 'Custom Variant',
-    patterns: [],
   },
   CUSTOM: {
     order: 9,
