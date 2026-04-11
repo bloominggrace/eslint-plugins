@@ -28,6 +28,9 @@ ruleTester.run('categorized', rule, {
       code: 'cn("flex items-center", "text-sm", disabled && "opacity-50")',
     },
     {
+      code: 'cn("variants({ size })", "aria-checked:bg-black", "disabled:bg-red", "className")',
+    },
+    {
       code: 'cn("variants({ size })", "flex items-center")',
     },
   ],
