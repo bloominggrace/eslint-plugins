@@ -23,7 +23,7 @@ export function validateClassNames(
 
       const className = getValue(node);
       const isValidClassName = typeof className === 'string' && className.trim() !== '';
-      const categoryOrder = isValidClassName ? getCategoryOrder(className) : CATEGORIES.CVA.order;
+      const categoryOrder = isValidClassName ? getCategoryOrder(className) : CATEGORIES.CUSTOM.order;
 
       return {
         node,
@@ -34,7 +34,7 @@ export function validateClassNames(
     })
     .filter((meta): meta is ClassMeta => meta !== null);
 
-  if (classMetas.length <= 1) {
+  if (classMetas.length < 1) {
     return;
   }
 
