@@ -109,6 +109,7 @@ export const CATEGORIES = {
       /^diagonal-fractions$/,
       /^divide-/,
       /^drop-shadow/,
+      /^field-sizing-/,
       /^fill-/,
       /^filter$/,
       /^font-/,
