@@ -167,6 +167,10 @@ function getValue(node: Node): string | null {
     return getValue(node.consequent) ?? getValue(node.alternate);
   }
 
+  if (node.type === 'CallExpression' && node.callee.type === 'Identifier') {
+    return node.callee.name;
+  }
+
   return null;
 }
 
